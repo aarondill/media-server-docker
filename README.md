@@ -2,6 +2,8 @@
 
 An attempt to containerize my media server setup.
 
+See [rpi-docker](https://github.com/aarondill/rpi-docker) for my Raspberry Pi setup. Note that these could be used on the same machine, but make sure not to run the Tailscale container twice.
+
 ## Setup
 
 1. Install Docker and Docker Compose
