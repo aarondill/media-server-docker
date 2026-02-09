@@ -9,7 +9,7 @@ services:
       - ./config:/config
       - ./cache:/cache
       - type: bind
-        source: ${MEDIA_ROOT}
+        source: ${MEDIA_ROOT?:You must specify a media root in .env}
         target: /media
         read_only: true
     restart: "unless-stopped"
