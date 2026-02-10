@@ -9,7 +9,9 @@ You should set your webui password in the settings
 1. Go to Settings > Web UI
 2. Input your new password in the "WebUI Password" field
 3. Check "Bypass authentication for clients on localhost" (required for gluetun)
-4. Disable authentication (optional)
+4. Go to Settings > Advanced > Networking and set "Network interface" to "tun0"
+   1. This shouldn't be necessary, as gluetun already has a kill switch, but it's here for good measure
+5. Disable authentication (optional)
    1. Check "Bypass authentication for clients in whitelisted IP subnets"
    2. Input 172.16.0.0/12 in the "Whitelisted IP subnets" field
    3. NOTE: This disables authentication for all IPs, since qbittorrent just sees the docker network!
