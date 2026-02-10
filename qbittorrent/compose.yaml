@@ -35,7 +35,7 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - ./config/qbittorrent:/config # location of database and configs
-      - ./downloads:/downloads # location of qbittorrent downloads
+      - ${DOWNLOAD_PATH?:You must set the host download location}:/downloads # location of qbittorrent downloads
     depends_on:
       gluetun:
         condition: service_healthy
