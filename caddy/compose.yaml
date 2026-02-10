@@ -1,0 +1,29 @@
+services:
+  caddy:
+    #image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    build: .
+    ports:
+      - 80:80
+      - 443:443/tcp
+      - 443:443/udp
+    environment:
+      - CADDY_INGRESS_NETWORKS=caddy
+    networks:
+      - caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+    labels:
+      # caddy.acme_ca: https://acme-staging-v02.api.letsencrypt.org/directory
+      caddy.acme_dns: porkbun
+      caddy.acme_dns.api_key: ${PORKBUN_API_KEY?:Porkbun API key not set}
+      caddy.acme_dns.api_secret_key: ${PORKBUN_API_SECRET_KEY?:Porkbun API secret key not set}
+
+networks:
+  caddy:
+    name: caddy # So that it's no longer scoped to project
+    enable_ipv6: true
+
+volumes:
+  caddy_data:
