@@ -13,3 +13,12 @@ services:
         target: /media
         read_only: true
     restart: "unless-stopped"
+    networks:
+      - caddy
+    labels:
+      caddy: jellyfin.${DOMAIN_NAME?DOMAIN_NAME must be set}
+      caddy.reverse_proxy: "{{upstreams 8096}}"
+
+networks:
+  caddy:
+    external: true

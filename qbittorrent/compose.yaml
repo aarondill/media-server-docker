@@ -23,6 +23,10 @@ services:
     volumes:
       - ./config/gluetun:/gluetun
     restart: unless-stopped
+    networks: [caddy]
+    labels:
+      caddy: qbittorrent.${DOMAIN_NAME?DOMAIN_NAME must be set}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
 
   # image used to download stuff; run over gluetun network (vpn killswitch)
   qbittorrent:
@@ -41,3 +45,7 @@ services:
         condition: service_healthy
     network_mode: container:gluetun # use the gluetun container network (vpn killswitch)
     restart: unless-stopped
+
+networks:
+  caddy:
+    external: true
