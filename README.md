@@ -12,12 +12,6 @@ See [rpi-docker](https://github.com/aarondill/rpi-docker) for my Raspberry Pi se
 4. Run `./start.sh` to start all the containers
    - You can also run `docker-compose up` in each directory to start each of the containers
 
-## Note on reverse proxy
-
-Be sure to set DNS records for the domain you're using.
-If using pihole, you can add local _and_ tailscale entries and it will resolve the right one.
-For external use, set the DNS record to the tailscale IP.
-
 ## Manual Setup
 
 ### Note
