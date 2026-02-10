@@ -1,3 +1,8 @@
+x-common-env: &common-env
+  PUID: 1000
+  PGID: 1000
+  TZ: America/Chicago
+
 services:
   # image used for vpn killswitch network
   gluetun:
@@ -10,16 +15,17 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
+      <<: *common-env
       # see https://github.com/qdm12/gluetun-wiki for more details
-      - VPN_TYPE=${VPN_TYPE:-wireguard}
-      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER?:VPN_SERVICE_PROVIDER must be set}
-      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY must be set}
-        # optional
-      - SERVER_COUNTRIES=${SERVER_COUNTRIES:-}
-        # Port forwarding
-      - VPN_PORT_FORWARDING=on
-      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"{{VPN_INTERFACE}}\",\"random_port\":false,\"upnp\":false}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
-      - VPN_PORT_FORWARDING_DOWN_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":0,\"current_network_interface\":\"lo"}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
+      VPN_TYPE: ${VPN_TYPE:-wireguard}
+      VPN_SERVICE_PROVIDER: ${VPN_SERVICE_PROVIDER?:VPN_SERVICE_PROVIDER must be set}
+      WIREGUARD_PRIVATE_KEY: ${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY must be set}
+      # optional
+      SERVER_COUNTRIES: ${SERVER_COUNTRIES:-}
+      # Port forwarding
+      VPN_PORT_FORWARDING: on
+      VPN_PORT_FORWARDING_UP_COMMAND: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"{{VPN_INTERFACE}}\",\"random_port\":false,\"upnp\":false}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
+      VPN_PORT_FORWARDING_DOWN_COMMAND: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":0,\"current_network_interface\":\"lo"}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
     volumes:
       - ./config/gluetun:/gluetun
     restart: unless-stopped
@@ -33,11 +39,9 @@ services:
     image: linuxserver/qbittorrent:5.0.2-libtorrentv1
     container_name: qbittorrent
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-      - WEBUI_PORT=8080
-      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+      <<: *common-env
+      WEBUI_PORT: 8080
+      DOCKER_MODS: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
     volumes:
       - ./config/qbittorrent:/config # location of database and configs
       - ${DOWNLOAD_PATH?:You must set the host download location}:/downloads # location of qbittorrent downloads
