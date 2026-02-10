@@ -2,7 +2,7 @@ services:
   # image used for vpn killswitch network
   gluetun:
     image: qmcgaw/gluetun:latest
-    container_name: arr-suite-gluetun
+    container_name: gluetun
     cap_add:
       - NET_ADMIN
     ports:
@@ -27,7 +27,7 @@ services:
   # image used to download stuff; run over gluetun network (vpn killswitch)
   qbittorrent:
     image: linuxserver/qbittorrent:5.0.2-libtorrentv1
-    container_name: arr-suite-qbittorrent
+    container_name: qbittorrent
     environment:
       - PUID=1000
       - PGID=1000
@@ -39,5 +39,5 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
-    network_mode: container:arr-suite-gluetun # use the gluetun container network (vpn killswitch)
+    network_mode: container:gluetun # use the gluetun container network (vpn killswitch)
     restart: unless-stopped
