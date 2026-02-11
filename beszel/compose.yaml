@@ -15,7 +15,6 @@ services:
       - 8090:8090
     volumes:
       - ./beszel_data:/beszel_data
-      - ./config.yaml:/beszel_data/config.yml
       - beszel_socket:/beszel_socket
     healthcheck:
       test: ['CMD', '/beszel', 'health', '--url', 'http://localhost:8090']

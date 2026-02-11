@@ -1,3 +1,0 @@
-systems:
-    - name: Jellyfin
-      host: /beszel_socket/beszel.sock
