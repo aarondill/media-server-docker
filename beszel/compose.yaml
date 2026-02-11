@@ -10,6 +10,7 @@ services:
     restart: unless-stopped
     environment:
       APP_URL: *url
+      AUTO_LOGIN: ${BESZEL_AUTO_LOGIN_EMAIL:-} # explicitly permit empty values
     ports:
       - 8090:8090
     volumes:
