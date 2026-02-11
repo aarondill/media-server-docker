@@ -53,6 +53,11 @@ services:
         condition: service_healthy
     network_mode: container:gluetun # use the gluetun container network (vpn killswitch)
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "--show-error", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 networks:
   caddy:
