@@ -16,7 +16,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8090}}"
 
   beszel-agent:
-    image: henrygd/beszel-agent:latest
+    image: henrygd/beszel-agent:alpine
     container_name: beszel-agent
     restart: unless-stopped
     network_mode: host
