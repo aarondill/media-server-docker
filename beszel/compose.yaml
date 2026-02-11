@@ -33,7 +33,8 @@ services:
     volumes:
       - ./beszel_agent_data:/var/lib/beszel-agent
       - ./beszel_socket:/beszel_socket
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro # docker containers
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # systemd services
       - ${MEDIA_ROOT?:MEDIA_ROOT must be set}/.beszel:/extra-filesystems/sda1__Media Root:ro
     privileged: true # This can be replaced with `devices: ...` to allow smartctl to run
     cap_add:
