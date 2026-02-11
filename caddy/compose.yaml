@@ -23,8 +23,7 @@ services:
 
 networks:
   caddy:
-    name: caddy # So that it's no longer scoped to project
-    enable_ipv6: true
+    external: true
 
 volumes:
   caddy_data:
