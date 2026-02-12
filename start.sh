@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 shopt -s nullglob
-cmd=(up -d)
+cmd=(up -d "$@")
 if [[ "$0" == *"stop.sh" ]]; then
-  cmd=(down)
+  cmd=(down "$@")
 fi
 
 files=(./*/compose.yaml)
@@ -16,6 +16,7 @@ fi
 if [ "${cmd[0]}" = up ]; then
   # Check if it exists first
   if ! docker network inspect caddy &>/dev/null; then
+    echo "> Creating caddy network"
     docker network create caddy --ipv6
   fi
 fi
@@ -23,10 +24,15 @@ fi
 for file in "${files[@]}"; do
   dir="$(dirname -- "$file")"
   pushd "$dir" >/dev/null || continue
-  docker compose "${cmd[@]}"
+  run=(docker compose "${cmd[@]}")
+  echo "> $dir :->: ${run[*]@Q}"
+  "${run[@]}"
   popd >/dev/null
 done
 
 if [ "${cmd[0]}" = down ]; then
-  docker network rm -f caddy 2>/dev/null
+  if docker network inspect caddy &>/dev/null; then
+    echo "> Removing caddy network"
+    docker network rm -f caddy 2>/dev/null
+  fi
 fi
