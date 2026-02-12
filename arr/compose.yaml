@@ -1,6 +1,5 @@
 x-warnings: # A block to avoid repeating the same warnings.
-  - ${DOWNLOAD_PATH?:You must set the torrent download location} # where to fetch torrents from
-  - ${MEDIA_ROOT?:You must set the media library location} # where to store media (/Shows, /Movies)
+  - ${MEDIA_ROOT?:You must set the media root location} # where to download and store media (/downloads, /media/Shows, /media/Movies)
   - ${DOMAIN_NAME?:You must set the domain name} # where to access the services
 x-common-env: &common-env
   PUID: $UID
@@ -32,8 +31,7 @@ services:
     environment:
       <<: *common-env
     volumes:
-      - $DOWNLOAD_PATH:/downloads # TODO: consolidate with MEDIA_ROOT
-      - $MEDIA_ROOT:/media
+      - $MEDIA_ROOT:/data
       - ./configs/sonarr:/config
     ports:
       - 8989:8989/tcp # web ui
@@ -51,7 +49,6 @@ services:
     environment:
       <<: *common-env
     volumes:
-      - $DOWNLOAD_PATH:/downloads # TODO: consolidate with MEDIA_ROOT
       - $MEDIA_ROOT:/media
       - ./configs/radarr:/config
     ports:

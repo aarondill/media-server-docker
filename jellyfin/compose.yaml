@@ -11,7 +11,7 @@ services:
     volumes:
       - ./config:/config
       - ./cache:/cache
-      - "${MEDIA_ROOT?:You must specify a media root in .env}:/media:ro"
+      - "${MEDIA_ROOT?:You must specify a media root in .env}/media:/media:ro"
     networks:
       - caddy
     labels:
