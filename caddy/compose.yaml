@@ -1,3 +1,7 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${PORKBUN_API_KEY:?Porkbun API key not set}
+  - ${PORKBUN_API_SECRET_KEY:?Porkbun API secret key not set}
+
 services:
   caddy:
     #image: lucaslorentz/caddy-docker-proxy:ci-alpine
@@ -18,8 +22,8 @@ services:
     labels:
       # caddy.acme_ca: https://acme-staging-v02.api.letsencrypt.org/directory
       caddy.acme_dns: porkbun
-      caddy.acme_dns.api_key: ${PORKBUN_API_KEY?:Porkbun API key not set}
-      caddy.acme_dns.api_secret_key: ${PORKBUN_API_SECRET_KEY?:Porkbun API secret key not set}
+      caddy.acme_dns.api_key: $PORKBUN_API_KEY
+      caddy.acme_dns.api_secret_key: $PORKBUN_API_SECRET_KEY
       # Health check
       caddy_0: http://localhost:12345
       caddy_0.respond: /health "OK" 200

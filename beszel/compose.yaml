@@ -1,6 +1,6 @@
-# These should match, but the second has https:// in front.
-x-domain: &domain dash.${DOMAIN_NAME?DOMAIN_NAME must be set}
-x-url: &url https://dash.${DOMAIN_NAME?DOMAIN_NAME must be set}
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
+  - ${MEDIA_ROOT:?MEDIA_ROOT must be set}
 
 services:
   beszel:
@@ -9,7 +9,7 @@ services:
     ports:
       - 8090:8090
     environment:
-      APP_URL: *url
+      APP_URL: http://dash.$DOMAIN_NAME # NOTE: this will be included in any emails sent
       AUTO_LOGIN: ${BESZEL_AUTO_LOGIN_EMAIL:-} # explicitly permit empty values
     healthcheck:
       test: ["CMD", "/beszel", "health", "--url", "http://localhost:8090"]
@@ -22,7 +22,7 @@ services:
     networks:
       - caddy
     labels:
-      caddy: *domain
+      caddy: dash.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8090}}"
 
   beszel-agent:
@@ -46,7 +46,7 @@ services:
       interval: 120s
     restart: unless-stopped
     volumes:
-      - ${MEDIA_ROOT?:MEDIA_ROOT must be set}/.beszel:/extra-filesystems/sda1__Media Root:ro
+      - $MEDIA_ROOT/.beszel:/extra-filesystems/sda1__Media Root:ro
       - ./beszel_agent_data:/var/lib/beszel-agent
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # systemd services
       - /var/run/docker.sock:/var/run/docker.sock:ro # docker containers

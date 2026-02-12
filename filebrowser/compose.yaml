@@ -1,3 +1,6 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${DOMAIN_NAME:?You must set the domain name} # where to access the services
+
 services:
   filebrowser:
     image: filebrowser/filebrowser
@@ -16,7 +19,7 @@ services:
     networks:
       - caddy
     labels:
-      caddy: files.${DOMAIN_NAME?DOMAIN_NAME must be set}
+      caddy: files.DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8081}}"
     restart: unless-stopped
 

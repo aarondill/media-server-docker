@@ -1,9 +1,9 @@
 x-warnings: # A block to avoid repeating the same warnings.
-  - ${MEDIA_ROOT?:You must set the media root location} # where to download and store media (/downloads, /media/Shows, /media/Movies)
-  - ${DOMAIN_NAME?:You must set the domain name} # where to access the services
+  - ${DOMAIN_NAME:?You must set the domain name}
+  - ${MEDIA_ROOT:?You must set the media root location} # where to download and store media (/downloads, /media/Shows, /media/Movies)
 x-common-env: &common-env
-  PUID: $UID
   PGID: $GID
+  PUID: $UID
   TZ: $TZ
 
 services:

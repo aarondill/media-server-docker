@@ -1,3 +1,7 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
+  - ${MEDIA_ROOT:?MEDIA_ROOT must be set}
+
 services:
   jellyfin:
     image: jellyfin/jellyfin
@@ -11,11 +15,11 @@ services:
     volumes:
       - ./config:/config
       - ./cache:/cache
-      - "${MEDIA_ROOT?:You must specify a media root in .env}/media:/media:ro"
+      - "$MEDIA_ROOT/media:/media:ro"
     networks:
       - caddy
     labels:
-      caddy: jellyfin.${DOMAIN_NAME?DOMAIN_NAME must be set}
+      caddy: jellyfin.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8096}}"
     restart: "unless-stopped"
 

@@ -1,6 +1,11 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
+  - ${MEDIA_ROOT:?MEDIA_ROOT must be set}
+  - ${VPN_SERVICE_PROVIDER:?VPN_SERVICE_PROVIDER must be set}
+  - ${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY must be set}
 x-common-env: &common-env
-  PUID: $UID
   PGID: $GID
+  PUID: $UID
   TZ: $TZ
 
 services:
@@ -16,8 +21,8 @@ services:
       <<: *common-env
       # see https://github.com/qdm12/gluetun-wiki for more details
       VPN_TYPE: ${VPN_TYPE:-wireguard}
-      VPN_SERVICE_PROVIDER: ${VPN_SERVICE_PROVIDER?:VPN_SERVICE_PROVIDER must be set}
-      WIREGUARD_PRIVATE_KEY: ${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY must be set}
+      VPN_SERVICE_PROVIDER: $VPN_SERVICE_PROVIDER
+      WIREGUARD_PRIVATE_KEY: $WIREGUARD_PRIVATE_KEY
       # optional
       SERVER_COUNTRIES: ${SERVER_COUNTRIES:-}
       # Port forwarding
@@ -34,7 +39,7 @@ services:
     networks:
       - caddy
     labels:
-      caddy: qbittorrent.${DOMAIN_NAME?DOMAIN_NAME must be set}
+      caddy: qbittorrent.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
 
