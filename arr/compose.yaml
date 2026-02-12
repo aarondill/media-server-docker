@@ -1,0 +1,99 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${DOWNLOAD_PATH?:You must set the torrent download location} # where to fetch torrents from
+  - ${MEDIA_ROOT?:You must set the media library location} # where to store media (/Shows, /Movies)
+  - ${DOMAIN_NAME?:You must set the domain name} # where to access the services
+x-common-env: &common-env
+  PUID: $UID
+  PGID: $GID
+  TZ: $TZ
+
+services:
+  # image used to index torrent links from the internet
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      <<: *common-env
+    volumes:
+      - ./configs/prowlarr:/config
+    ports:
+      - 9696:9696/tcp # web ui
+    restart: unless-stopped
+    networks:
+      - caddy
+    labels:
+      caddy: prowlarr.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 9696}}"
+
+  # image used to scan for tv shows
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      <<: *common-env
+    volumes:
+      - $DOWNLOAD_PATH:/downloads # TODO: consolidate with MEDIA_ROOT
+      - $MEDIA_ROOT:/media
+      - ./configs/sonarr:/config
+    ports:
+      - 8989:8989/tcp # web ui
+    restart: unless-stopped
+    networks:
+      - caddy
+    labels:
+      caddy: sonarr.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 8989}}"
+
+  # image used to scan for movies
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      <<: *common-env
+    volumes:
+      - $DOWNLOAD_PATH:/downloads # TODO: consolidate with MEDIA_ROOT
+      - $MEDIA_ROOT:/media
+      - ./configs/radarr:/config
+    ports:
+      - 7878:7878/tcp # web ui
+    restart: unless-stopped
+    networks:
+      - caddy
+    labels:
+      caddy: radarr.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 7878}}"
+
+  # image used to manage subtitles
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      <<: *common-env
+    volumes:
+      - $MEDIA_ROOT:/media
+      - ./configs/bazarr:/config
+    ports:
+      - 6767:6767/tcp # web ui
+    restart: unless-stopped
+    networks:
+      - caddy
+    labels:
+      caddy: bazarr.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 6767}}"
+
+  # image used to bypass cloudflare for prowlarr
+  flaresolverr:
+    image: flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      LOG_LEVEL: info
+      LOG_HTML: false
+      CAPTCHA_SOLVER: none
+      TZ: $TZ
+    restart: unless-stopped
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true
