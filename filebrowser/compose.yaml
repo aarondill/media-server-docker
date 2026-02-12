@@ -19,7 +19,7 @@ services:
     networks:
       - caddy
     labels:
-      caddy: files.DOMAIN_NAME
+      caddy: files.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8081}}"
     restart: unless-stopped
 
