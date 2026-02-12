@@ -12,11 +12,6 @@ services:
       - NET_ADMIN
     ports:
       - 8080:8080 # qbittorrent http web ui
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1
-      - net.ipv6.conf.default.disable_ipv6=1
     environment:
       <<: *common-env
       # see https://github.com/qdm12/gluetun-wiki for more details
@@ -29,35 +24,41 @@ services:
       VPN_PORT_FORWARDING: on
       VPN_PORT_FORWARDING_UP_COMMAND: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"{{VPN_INTERFACE}}\",\"random_port\":false,\"upnp\":false}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
       VPN_PORT_FORWARDING_DOWN_COMMAND: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":0,\"current_network_interface\":\"lo"}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+    devices:
+      - /dev/net/tun:/dev/net/tun
     volumes:
       - ./config/gluetun:/gluetun
-    restart: unless-stopped
-    networks: [caddy]
+    networks:
+      - caddy
     labels:
       caddy: qbittorrent.${DOMAIN_NAME?DOMAIN_NAME must be set}
       caddy.reverse_proxy: "{{upstreams 8080}}"
+    restart: unless-stopped
 
   # image used to download stuff; run over gluetun network (vpn killswitch)
   qbittorrent:
     image: linuxserver/qbittorrent:5.0.2-libtorrentv1
     container_name: qbittorrent
-    environment:
-      <<: *common-env
-      WEBUI_PORT: 8080
-      DOCKER_MODS: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
-    volumes:
-      - ./config/qbittorrent:/config # location of database and configs
-      - ${DOWNLOAD_PATH?:You must set the host download location}:/downloads # location of qbittorrent downloads
     depends_on:
       gluetun:
         condition: service_healthy
     network_mode: container:gluetun # use the gluetun container network (vpn killswitch)
-    restart: unless-stopped
+    environment:
+      <<: *common-env
+      DOCKER_MODS: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+      WEBUI_PORT: 8080
     healthcheck:
       test: ["CMD", "curl", "-fs", "--show-error", "http://localhost:8080"]
       interval: 10s
       timeout: 5s
       retries: 3
+    volumes:
+      - ${DOWNLOAD_PATH?:You must set the host download location}:/downloads # location of qbittorrent downloads
+      - ./config/qbittorrent:/config # location of database and configs
+    restart: unless-stopped
 
 networks:
   caddy:

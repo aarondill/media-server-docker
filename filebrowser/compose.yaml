@@ -3,24 +3,26 @@ services:
     image: filebrowser/filebrowser
     container_name: filebrowser
     user: $UID:$GID
-    volumes:
-      - /:/srv
-      - config:/database
-      - ./custom.css:/branding/custom.css:ro
-      - ./entrypoint.sh:/custom-entrypoint.sh:ro
     entrypoint: /custom-entrypoint.sh
     ports:
       - 8081:8081
-    restart: unless-stopped
-    networks:
-      - caddy
     environment:
       FB_PORT: 8081
+    volumes:
+      - ./custom.css:/branding/custom.css:ro
+      - ./entrypoint.sh:/custom-entrypoint.sh:ro
+      - /:/srv
+      - config:/database
+    networks:
+      - caddy
     labels:
       caddy: files.${DOMAIN_NAME?DOMAIN_NAME must be set}
       caddy.reverse_proxy: "{{upstreams 8081}}"
-volumes:
-  config:
+    restart: unless-stopped
+
 networks:
   caddy:
     external: true
+
+volumes:
+  config:

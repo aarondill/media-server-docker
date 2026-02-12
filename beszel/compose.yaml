@@ -2,25 +2,25 @@
 x-domain: &domain dash.${DOMAIN_NAME?DOMAIN_NAME must be set}
 x-url: &url https://dash.${DOMAIN_NAME?DOMAIN_NAME must be set}
 
-
 services:
   beszel:
     image: henrygd/beszel:latest
     container_name: beszel
-    restart: unless-stopped
+    ports:
+      - 8090:8090
     environment:
       APP_URL: *url
       AUTO_LOGIN: ${BESZEL_AUTO_LOGIN_EMAIL:-} # explicitly permit empty values
-    ports:
-      - 8090:8090
+    healthcheck:
+      test: ["CMD", "/beszel", "health", "--url", "http://localhost:8090"]
+      start_period: 5s
+      interval: 120s
+    restart: unless-stopped
     volumes:
       - ./beszel_data:/beszel_data
       - beszel_socket:/beszel_socket
-    healthcheck:
-      test: ['CMD', '/beszel', 'health', '--url', 'http://localhost:8090']
-      start_period: 5s 
-      interval: 120s
-    networks: [caddy]
+    networks:
+      - caddy
     labels:
       caddy: *domain
       caddy.reverse_proxy: "{{upstreams 8090}}"
@@ -28,33 +28,33 @@ services:
   beszel-agent:
     image: henrygd/beszel-agent:alpine
     container_name: beszel-agent
-    restart: unless-stopped
-    network_mode: host
-    volumes:
-      - ./beszel_agent_data:/var/lib/beszel-agent
-      - beszel_socket:/beszel_socket
-      - /var/run/docker.sock:/var/run/docker.sock:ro # docker containers
-      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # systemd services
-      - ${MEDIA_ROOT?:MEDIA_ROOT must be set}/.beszel:/extra-filesystems/sda1__Media Root:ro
     privileged: true # This can be replaced with `devices: ...` to allow smartctl to run
     cap_add:
       - SYS_RAWIO # required for S.M.A.R.T. data
       - SYS_ADMIN # required for NVMe S.M.A.R.T. data
     depends_on:
       - beszel
+    network_mode: host
     environment:
-      LISTEN: /beszel_socket/beszel.sock
       HUB_URL: http://localhost:8090
-      # Explicitly allow empty values for these variables. They should be set after runnig beszel.
-      TOKEN: ${BESZEL_TOKEN}
-      KEY: ${BESZEL_KEY}
+      LISTEN: /beszel_socket/beszel.sock
+      KEY: $BESZEL_KEY
+      TOKEN: $BESZEL_TOKEN
     healthcheck:
-      test: ['CMD', '/agent', 'health']
-      interval: 120s
+      test: ["CMD", "/agent", "health"]
       start_period: 5s
+      interval: 120s
+    restart: unless-stopped
+    volumes:
+      - ${MEDIA_ROOT?:MEDIA_ROOT must be set}/.beszel:/extra-filesystems/sda1__Media Root:ro
+      - ./beszel_agent_data:/var/lib/beszel-agent
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # systemd services
+      - /var/run/docker.sock:/var/run/docker.sock:ro # docker containers
+      - beszel_socket:/beszel_socket
 
-volumes:
-  beszel_socket: # doesn't need to be persistent
 networks:
   caddy:
     external: true
+
+volumes:
+  beszel_socket:

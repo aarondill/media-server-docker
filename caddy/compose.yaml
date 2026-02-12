@@ -8,7 +8,7 @@ services:
       - 443:443/tcp
       - 443:443/udp
     environment:
-      - CADDY_INGRESS_NETWORKS=caddy
+      CADDY_INGRESS_NETWORKS: caddy
     networks:
       - caddy
     volumes:
@@ -22,14 +22,13 @@ services:
       caddy.acme_dns.api_secret_key: ${PORKBUN_API_SECRET_KEY?:Porkbun API secret key not set}
       # Health check
       caddy_0: http://localhost:12345
-      caddy_0.respond: /health-check "OK" 200
+      caddy_0.respond: /health "OK" 200
     healthcheck:
-      test:
-        ["CMD", "wget", "--spider", "-q", "http://localhost:12345/health-check"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:12345/health"]
+      start_period: 10s
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
 
 networks:
   caddy:

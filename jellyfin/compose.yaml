@@ -1,8 +1,8 @@
 services:
   jellyfin:
     image: jellyfin/jellyfin
-    user: $UID:$GID
     container_name: jellyfin
+    user: $UID:$GID
     ports:
       - 8096:8096/tcp
       - 7359:7359/udp
@@ -11,16 +11,13 @@ services:
     volumes:
       - ./config:/config
       - ./cache:/cache
-      - type: bind
-        source: ${MEDIA_ROOT?:You must specify a media root in .env}
-        target: /media
-        read_only: true
-    restart: "unless-stopped"
+      - "${MEDIA_ROOT?:You must specify a media root in .env}:/media:ro"
     networks:
       - caddy
     labels:
       caddy: jellyfin.${DOMAIN_NAME?DOMAIN_NAME must be set}
       caddy.reverse_proxy: "{{upstreams 8096}}"
+    restart: "unless-stopped"
 
 networks:
   caddy:
