@@ -1,6 +1,7 @@
 x-warnings: # A block to avoid repeating the same warnings.
   - ${PORKBUN_API_KEY:?Porkbun API key not set}
   - ${PORKBUN_API_SECRET_KEY:?Porkbun API secret key not set}
+  - ${DOMAIN_NAME:?Domain name not set}
 
 services:
   caddy:
@@ -33,6 +34,15 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+  whoami:
+    image: traefik/whoami
+    networks:
+      - caddy
+    environment:
+      WHOAMI_PORT_NUMBER: 4444
+    labels:
+      caddy: whoami.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 4444}}"
 
 networks:
   caddy:
