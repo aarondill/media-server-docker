@@ -44,7 +44,7 @@ services:
       - beszel
     environment:
       LISTEN: /beszel_socket/beszel.sock
-      HUB_URL: *url
+      HUB_URL: http://localhost:8090
       # Explicitly allow empty values for these variables. They should be set after runnig beszel.
       TOKEN: ${BESZEL_TOKEN}
       KEY: ${BESZEL_KEY}
