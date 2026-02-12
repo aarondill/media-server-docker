@@ -1,7 +1,7 @@
 x-common-env: &common-env
-  PUID: 1000
-  PGID: 1000
-  TZ: America/Chicago
+  PUID: $UID
+  PGID: $GID
+  TZ: $TZ
 
 services:
   # image used for vpn killswitch network
