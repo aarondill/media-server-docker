@@ -49,7 +49,7 @@ services:
     environment:
       <<: *common-env
     volumes:
-      - $MEDIA_ROOT:/media
+      - $MEDIA_ROOT:/data
       - ./configs/radarr:/config
     ports:
       - 7878:7878/tcp # web ui
@@ -67,7 +67,7 @@ services:
     environment:
       <<: *common-env
     volumes:
-      - $MEDIA_ROOT:/media
+      - $MEDIA_ROOT:/data
       - ./configs/bazarr:/config
     ports:
       - 6767:6767/tcp # web ui

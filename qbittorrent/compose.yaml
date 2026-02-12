@@ -61,7 +61,7 @@ services:
       timeout: 5s
       retries: 3
     volumes:
-      - $MEDIA_ROOT/downloads:/downloads # location of qbittorrent downloads
+      - $MEDIA_ROOT/downloads:/data/downloads # location of qbittorrent downloads
       - ./config/qbittorrent:/config # location of database and configs
     restart: unless-stopped
 
