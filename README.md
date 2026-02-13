@@ -23,4 +23,6 @@ Some containers might need additional setup (i.e. Tailscale). Check the README i
 Read extra setup in each directory's README.
 
 ## See Also
+
 Enable wifi on startup: https://gist.github.com/aarondill/b0448c5482c706eb56b311caf1fdd261
+Start tmux on ssh login: https://gist.github.com/aarondill/6378184559e6590a0ba31ec3733efb95
