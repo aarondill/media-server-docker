@@ -176,7 +176,7 @@
   <TrickplayOptions>
     <EnableHwAcceleration>false</EnableHwAcceleration>
     <EnableHwEncoding>false</EnableHwEncoding>
-    <EnableKeyFrameOnlyExtraction>false</EnableKeyFrameOnlyExtraction>
+    <EnableKeyFrameOnlyExtraction>true</EnableKeyFrameOnlyExtraction>
     <ScanBehavior>NonBlocking</ScanBehavior>
     <ProcessPriority>BelowNormal</ProcessPriority>
     <Interval>10000</Interval>
