@@ -78,19 +78,6 @@ services:
       caddy: bazarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 6767}}"
 
-  # image used to bypass cloudflare for prowlarr
-  flaresolverr:
-    image: flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
-    environment:
-      LOG_LEVEL: info
-      LOG_HTML: false
-      CAPTCHA_SOLVER: none
-      TZ: $TZ
-    restart: unless-stopped
-    networks:
-      - caddy
-
 networks:
   caddy:
     external: true
