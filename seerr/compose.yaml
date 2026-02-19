@@ -3,8 +3,9 @@ x-warnings: # A block to avoid repeating the same warnings.
 
 services:
   jellyseerr:
-    image: ghcr.io/fallenbagel/jellyseerr:latest
-    container_name: jellyseerr
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
     environment:
       LOG_LEVEL: debug
       TZ: $TZ
@@ -23,8 +24,10 @@ services:
     networks:
       - caddy
     labels:
-      caddy: jellyseerr.$DOMAIN_NAME
-      caddy.reverse_proxy: "{{upstreams 5055}}"
+      caddy_0: jellyseerr.$DOMAIN_NAME
+      caddy_0.redir: "https://seerr.$DOMAIN_NAME{uri}"
+      caddy_1: seerr.$DOMAIN_NAME
+      caddy_1.reverse_proxy: "{{upstreams 5055}}"
 
 networks:
   caddy:
