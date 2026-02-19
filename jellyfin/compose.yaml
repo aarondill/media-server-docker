@@ -4,7 +4,7 @@ x-warnings: # A block to avoid repeating the same warnings.
 
 services:
   jellyfin:
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:10
     container_name: jellyfin
     user: $UID:$GID
     ports:

@@ -3,7 +3,7 @@ x-warnings: # A block to avoid repeating the same warnings.
 
 services:
   jellyseerr:
-    image: ghcr.io/seerr-team/seerr:latest
+    image: ghcr.io/seerr-team/seerr:v3.0.1
     init: true
     container_name: seerr
     environment:

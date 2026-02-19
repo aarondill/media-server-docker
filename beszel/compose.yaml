@@ -4,7 +4,7 @@ x-warnings: # A block to avoid repeating the same warnings.
 
 services:
   beszel:
-    image: henrygd/beszel:latest
+    image: henrygd/beszel:0.18
     container_name: beszel
     ports:
       - 8090:8090
@@ -26,7 +26,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8090}}"
 
   beszel-agent:
-    image: henrygd/beszel-agent:alpine
+    image: henrygd/beszel-agent:0.18
     container_name: beszel-agent
     privileged: true # This can be replaced with `devices: ...` to allow smartctl to run
     cap_add:

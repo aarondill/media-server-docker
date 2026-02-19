@@ -3,7 +3,7 @@ x-warnings: # A block to avoid repeating the same warnings.
 
 services:
   filebrowser:
-    image: filebrowser/filebrowser
+    image: filebrowser/filebrowser:v2
     container_name: filebrowser
     user: $UID:$GID
     entrypoint: /custom-entrypoint.sh
