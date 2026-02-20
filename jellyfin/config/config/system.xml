@@ -179,14 +179,14 @@
     <EnableKeyFrameOnlyExtraction>true</EnableKeyFrameOnlyExtraction>
     <ScanBehavior>NonBlocking</ScanBehavior>
     <ProcessPriority>BelowNormal</ProcessPriority>
-    <Interval>10000</Interval>
+    <Interval>15000</Interval>
     <WidthResolutions>
       <int>320</int>
     </WidthResolutions>
     <TileWidth>10</TileWidth>
     <TileHeight>10</TileHeight>
     <Qscale>4</Qscale>
-    <JpegQuality>90</JpegQuality>
+    <JpegQuality>80</JpegQuality>
     <ProcessThreads>1</ProcessThreads>
   </TrickplayOptions>
   <EnableLegacyAuthorization>true</EnableLegacyAuthorization>
