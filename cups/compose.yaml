@@ -1,3 +1,6 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
+
 services:
     cups:
         image: anujdatar/cups
@@ -12,3 +15,11 @@ services:
         volumes:
           - ./config/cupsd.conf:/etc/cups/cupsd.conf:ro
           - ./config/printers.conf:/etc/cups/printers.conf:ro
+        networks:
+          - caddy
+        labels:
+          caddy: cups.$DOMAIN_NAME
+          caddy.reverse_proxy: "{{upstreams 631}}"
+networks:
+  caddy:
+    external: true
