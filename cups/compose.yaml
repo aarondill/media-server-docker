@@ -10,4 +10,5 @@ services:
             - CUPSPASSWORD=password
             - TZ="$TZ"
         volumes:
-            - ./cups:/etc/cupsd
+          - ./config/cupsd.conf:/etc/cups/cupsd.conf:ro
+          - ./config/printers.conf:/etc/cups/printers.conf:ro
