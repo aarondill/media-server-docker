@@ -30,7 +30,7 @@
     <string>an</string>
   </SortRemoveWords>
   <MinResumePct>3</MinResumePct>
-  <MaxResumePct>95</MaxResumePct>
+  <MaxResumePct>90</MaxResumePct>
   <MinResumeDurationSeconds>180</MinResumeDurationSeconds>
   <MinAudiobookResume>5</MinAudiobookResume>
   <MaxAudiobookResume>5</MaxAudiobookResume>
