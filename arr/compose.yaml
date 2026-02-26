@@ -78,6 +78,16 @@ services:
       caddy: bazarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 6767}}"
 
+  # image used to bypass cloudflare for prowlarr
+  byparr:
+    image: ghcr.io/thephaseless/byparr:2.1
+    container_name: byparr
+    environment:
+      <<: *common-env
+    restart: unless-stopped
+    networks:
+      - caddy
+
 networks:
   caddy:
     external: true
