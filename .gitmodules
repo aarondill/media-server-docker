@@ -1,3 +1,6 @@
 [submodule "tailscale"]
 	path = tailscale
 	url = https://github.com/aarondill/tailscale-docker
+[submodule "pihole/pihole-dns-shim"]
+	path = pihole/pihole-dns-shim
+	url = https://github.com/aarondill/docker-pihole-dns-shim.git

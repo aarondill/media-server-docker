@@ -1,0 +1,16 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${PIHOLE_TOKEN:?Set the Pi-hole token from the app password}
+
+services:
+  pihole-dns-shim:
+    # image: theonlysinjin/docker-pihole-dns-shim
+    build: ./pihole-dns-shim
+    restart: unless-stopped
+    environment:
+      PIHOLE_TOKEN: "$PIHOLE_TOKEN"
+      PIHOLE_API: "http://pi.hole/api"
+      REAP_SECONDS: 10
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    # labels:
+    #   - pihole.custom-record=[["test.lan", "127.0.0.1"]]
