@@ -6,9 +6,11 @@ services:
     # image: theonlysinjin/docker-pihole-dns-shim
     build: ./pihole-dns-shim
     restart: unless-stopped
+    network_mode: host
     environment:
       PIHOLE_TOKEN: "$PIHOLE_TOKEN"
       PIHOLE_API: "http://pi.hole/api"
+      OWNERSHIP_MODE: "DOMAIN"
       REAP_SECONDS: 10
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
