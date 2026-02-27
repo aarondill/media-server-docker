@@ -34,5 +34,6 @@ while true; do
   contents=$(go) || true
   # write all at once to avoid dnsmasq reading partial files
   printf '%s\n' "$contents" >"$output_file"
+  printf 'Wrote %s\n' "$output_file" >&2
   sleep "$interval"
 done
