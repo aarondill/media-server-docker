@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 output_file="${1:?You must provide an output file}"
 interval="${2:-30}"
 
@@ -11,16 +10,15 @@ INTERFACE=tailscale0
 go() {
   ids=()
   mapfile -t ids < <(docker container ls --filter "label=$DOMAIN_LABEL" --format "{{ .ID }}" --no-trunc)
-  if [ ${#ids[@]} -eq 0 ]; then
-    printf "%s\n" 'No containers found with label %s' "$DOMAIN_LABEL" >&2
+  if [ "${#ids[@]}" -eq 0 ]; then
+    printf 'No containers found with label %s\n' "$DOMAIN_LABEL" >&2
     return 1
   fi
-  echo "IDS: ${ids[*]}"
   # Get ip, then remove subnet from the end
   ips=()
   mapfile -t ips < <(ip addr show dev "$INTERFACE" scope global | awk '/inet[0-9]*/{print $2}' | cut -d/ -f1)
-  if [ ${#ips[@]} -eq 0 ]; then
-    printf '%s\n' 'No IPs found for %s' "$INTERFACE" >&2
+  if [ "${#ips[@]}" -eq 0 ]; then
+    printf 'No IPs found for %s\n' "$INTERFACE" >&2
     return 1
   fi
   for id in "${ids[@]}"; do
