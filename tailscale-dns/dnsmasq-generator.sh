@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
 output_file="${1:?You must provide an output file}"
 interval="${2:-30}"
 
