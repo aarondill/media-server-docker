@@ -33,15 +33,14 @@ go() {
   done
 }
 
-last_output=''
 while true; do
   # write even if it returns 1, since this means we don't want any entries
   contents=$(go) || true
-  if [ "$contents" != "$last_output" ]; then
+  current=$(cat "$output_file" 2>/dev/null || true)
+  if [ "$contents" != "$current" ]; then
     # write all at once to avoid dnsmasq reading partial files
     printf '%s\n' "$contents" >"$output_file"
     printf 'Wrote %s\n' "$output_file" >&2
-    last_output="$contents"
   fi
   sleep "$interval"
 done
