@@ -41,7 +41,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dnsmasq-tailscale-hosts:/hosts/:rw
-      - ./dnsmasq-generator.sh:/dnsmasq-generator.sh:ro
 
 volumes:
   dnsmasq-tailscale-hosts:
