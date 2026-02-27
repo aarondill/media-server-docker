@@ -1,6 +1,7 @@
 x-warnings: # A block to avoid repeating the same warnings.
   - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
   - ${MEDIA_ROOT:?MEDIA_ROOT must be set}
+  - ${NIC_ACCESSIBLE:?NIC_ACCESSIBLE must be set}
 
 services:
   beszel:
@@ -24,6 +25,7 @@ services:
     labels:
       caddy: dash.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8090}}"
+      pihole.custom-record: '[["dash.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["dash.$DOMAIN_NAME", "tailscale0"]]'
 
   beszel-agent:
     image: henrygd/beszel-agent:0.18

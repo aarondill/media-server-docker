@@ -1,5 +1,6 @@
 x-warnings: # A block to avoid repeating the same warnings.
   - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
+  - ${NIC_ACCESSIBLE:?NIC_ACCESSIBLE must be set}
 
 services:
   jellyseerr:
@@ -28,6 +29,7 @@ services:
       caddy_0.redir: "https://seerr.$DOMAIN_NAME{uri}"
       caddy_1: seerr.$DOMAIN_NAME
       caddy_1.reverse_proxy: "{{upstreams 5055}}"
+      pihole.custom-record: '[["seerr.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["seerr.$DOMAIN_NAME", "tailscale0"]]'
 
 networks:
   caddy:

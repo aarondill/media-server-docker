@@ -1,25 +1,27 @@
 x-warnings: # A block to avoid repeating the same warnings.
   - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
+  - ${NIC_ACCESSIBLE:?NIC_ACCESSIBLE must be set}
 
 services:
-    cups:
-        image: anujdatar/cups
-        container_name: cups
-        restart: unless-stopped
-        ports:
-            - "631:631"
-        environment:
-            - CUPSADMIN=admin
-            - CUPSPASSWORD=password
-            - TZ="$TZ"
-        volumes:
-          - ./config/cupsd.conf:/etc/cups/cupsd.conf:ro
-          - ./config/printers.conf:/etc/cups/printers.conf:ro
-        networks:
-          - caddy
-        labels:
-          caddy: cups.$DOMAIN_NAME
-          caddy.reverse_proxy: "{{upstreams 631}}"
+  cups:
+    image: anujdatar/cups
+    container_name: cups
+    restart: unless-stopped
+    ports:
+      - "631:631"
+    environment:
+      - CUPSADMIN=admin
+      - CUPSPASSWORD=password
+      - TZ="$TZ"
+    volumes:
+      - ./config/cupsd.conf:/etc/cups/cupsd.conf:ro
+      - ./config/printers.conf:/etc/cups/printers.conf:ro
+    networks:
+      - caddy
+    labels:
+      caddy: cups.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 631}}"
+      pihole.custom-record: '[["cups.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["cups.$DOMAIN_NAME", "tailscale0"]]'
 networks:
   caddy:
     external: true

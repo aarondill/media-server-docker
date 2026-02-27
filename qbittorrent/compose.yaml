@@ -3,6 +3,7 @@ x-warnings: # A block to avoid repeating the same warnings.
   - ${MEDIA_ROOT:?MEDIA_ROOT must be set}
   - ${VPN_SERVICE_PROVIDER:?VPN_SERVICE_PROVIDER must be set}
   - ${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY must be set}
+  - ${NIC_ACCESSIBLE:?NIC_ACCESSIBLE must be set}
 x-common-env: &common-env
   PGID: $GID
   PUID: $UID
@@ -41,6 +42,7 @@ services:
     labels:
       caddy: qbittorrent.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8080}}"
+      pihole.custom-record: '[["qbittorrent.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["qbittorrent.$DOMAIN_NAME", "tailscale0"]]'
     restart: unless-stopped
 
   # image used to download stuff; run over gluetun network (vpn killswitch)

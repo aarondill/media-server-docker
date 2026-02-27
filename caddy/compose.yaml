@@ -2,6 +2,7 @@ x-warnings: # A block to avoid repeating the same warnings.
   - ${PORKBUN_API_KEY:?Porkbun API key not set}
   - ${PORKBUN_API_SECRET_KEY:?Porkbun API secret key not set}
   - ${DOMAIN_NAME:?Domain name not set}
+  - ${NIC_ACCESSIBLE:?NIC_ACCESSIBLE must be set}
 
 services:
   caddy:
@@ -43,6 +44,7 @@ services:
     labels:
       caddy: whoami.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 4444}}"
+      pihole.custom-record: '[["whoami.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["whoami.$DOMAIN_NAME", "tailscale0"]]'
 
 networks:
   caddy:

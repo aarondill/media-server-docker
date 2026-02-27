@@ -1,5 +1,6 @@
 x-warnings: # A block to avoid repeating the same warnings.
   - ${DOMAIN_NAME:?You must set the domain name} # where to access the services
+  - ${NIC_ACCESSIBLE:?NIC_ACCESSIBLE must be set}
 
 services:
   filebrowser:
@@ -21,6 +22,7 @@ services:
     labels:
       caddy: files.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8081}}"
+      pihole.custom-record: '[["files.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["files.$DOMAIN_NAME", "tailscale0"]]'
     restart: unless-stopped
 
 networks:
