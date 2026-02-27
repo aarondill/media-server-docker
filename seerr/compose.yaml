@@ -29,7 +29,7 @@ services:
       caddy_0.redir: "https://seerr.$DOMAIN_NAME{uri}"
       caddy_1: seerr.$DOMAIN_NAME
       caddy_1.reverse_proxy: "{{upstreams 5055}}"
-      pihole.custom-record: '[["seerr.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["seerr.$DOMAIN_NAME", "tailscale0"]]'
+      pihole.custom-record: '[["seerr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["seerr.$DOMAIN_NAME", "iface:tailscale0"]]'
 
 networks:
   caddy:

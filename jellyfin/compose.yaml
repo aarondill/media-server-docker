@@ -22,7 +22,7 @@ services:
     labels:
       caddy: jellyfin.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8096}}"
-      pihole.custom-record: '[["jellyfin.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["jellyfin.$DOMAIN_NAME", "tailscale0"]]'
+      pihole.custom-record: '[["jellyfin.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["jellyfin.$DOMAIN_NAME", "iface:tailscale0"]]'
     restart: "unless-stopped"
 
 networks:

@@ -25,7 +25,7 @@ services:
     labels:
       caddy: dash.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8090}}"
-      pihole.custom-record: '[["dash.$DOMAIN_NAME", "$NIC_ACCESSIBLE"], ["dash.$DOMAIN_NAME", "tailscale0"]]'
+      pihole.custom-record: '[["dash.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["dash.$DOMAIN_NAME", "iface:tailscale0"]]'
 
   beszel-agent:
     image: henrygd/beszel-agent:0.18
