@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-output_file="${1:?You must provide an output file}"
+output_file="${1:-$HOST_FILE}"
 interval="${2:-30}"
+if [ -z "$output_file" ]; then
+  printf '%s\n' 'You must provide an output file or set the HOST_FILE environment variable' >&2
+  exit 2
+fi
 
 DOMAIN_LABEL="caddy"
 INTERFACE=tailscale0
