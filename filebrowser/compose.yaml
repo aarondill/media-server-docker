@@ -22,7 +22,7 @@ services:
     labels:
       caddy: files.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8081}}"
-      pihole.custom-record: '[["files.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["files.$DOMAIN_NAME", "iface:tailscale0"]]'
+      pihole.custom-record: '[["files.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
     restart: unless-stopped
 
 networks:

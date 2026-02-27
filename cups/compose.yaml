@@ -21,7 +21,7 @@ services:
     labels:
       caddy: cups.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 631}}"
-      pihole.custom-record: '[["cups.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["cups.$DOMAIN_NAME", "iface:tailscale0"]]'
+      pihole.custom-record: '[["cups.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 networks:
   caddy:
     external: true

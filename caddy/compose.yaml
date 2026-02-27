@@ -44,7 +44,7 @@ services:
     labels:
       caddy: whoami.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 4444}}"
-      pihole.custom-record: '[["whoami.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["whoami.$DOMAIN_NAME", "iface:tailscale0"]]'
+      pihole.custom-record: '[["whoami.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 
 networks:
   caddy:

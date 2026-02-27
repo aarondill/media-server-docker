@@ -24,7 +24,7 @@ services:
     labels:
       caddy: prowlarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 9696}}"
-      pihole.custom-record: '[["prowlarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["prowlarr.$DOMAIN_NAME", "iface:tailscale0"]]'
+      pihole.custom-record: '[["prowlarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 
   # image used to scan for tv shows
   sonarr:
@@ -43,7 +43,7 @@ services:
     labels:
       caddy: sonarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8989}}"
-      pihole.custom-record: '[["sonarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["sonarr.$DOMAIN_NAME", "iface:tailscale0"]]'
+      pihole.custom-record: '[["sonarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 
   # image used to scan for movies
   radarr:
@@ -62,7 +62,7 @@ services:
     labels:
       caddy: radarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 7878}}"
-      pihole.custom-record: '[["radarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["radarr.$DOMAIN_NAME", "iface:tailscale0"]]'
+      pihole.custom-record: '[["radarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 
   # image used to manage subtitles
   bazarr:
@@ -81,7 +81,7 @@ services:
     labels:
       caddy: bazarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 6767}}"
-      pihole.custom-record: '[["bazarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"], ["bazarr.$DOMAIN_NAME", "iface:tailscale0"]]'
+      pihole.custom-record: '[["bazarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 
   # image used to bypass cloudflare for prowlarr
   byparr:
