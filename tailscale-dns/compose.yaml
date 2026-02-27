@@ -38,6 +38,9 @@ services:
     restart: unless-stopped
     network_mode: "host" # host to get the host's tailscale0 ip
     privileged: true
+    depends_on: # Needs tailscale IP
+      tailscale:
+        condition: service_healthy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dnsmasq-tailscale-hosts:/hosts/:rw
