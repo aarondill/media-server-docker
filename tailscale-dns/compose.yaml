@@ -1,0 +1,47 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest # Image to be used
+    container_name: tailscale-dns # Name for local container management
+    hostname: dns # Name used within your Tailscale environment
+    environment:
+      TS_ACCEPT_DNS: true
+      TS_STATE_DIR: "/var/lib/tailscale"
+      TS_USERSPACE: false # Bizarrely, even if you bind /dev/net/tun in, you still need to tell the image to not use userspace networking
+      TS_AUTH_ONCE: true # If you have a config error somewhere, and this is set to true, it'll be really hard to figure it out
+    volumes:
+      - ./state:/var/lib/tailscale
+    devices: [/dev/net/tun:/dev/net/tun]
+    cap_add: [net_admin]
+    healthcheck: # The built-in healthcheck doesn't seem to respond to internet loss.
+      test: tailscale status --peers=false --json | grep -q 'Online.*true'
+      interval: 30s
+      start_period: 5s
+    restart: unless-stopped
+
+  dnsmasq:
+    image: dockurr/dnsmasq
+    container_name: tailscale-dnsmasq
+    network_mode: service:tailscale # Sidecar configuration to route ${SERVICE} through Tailscale
+    restart: unless-stopped
+    cap_add: [NET_ADMIN]
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    environment:
+      DNS1: "pihole" # resolved using tailscale magicdns (TS_ACCEPT_DNS=true)
+      DNS2: ""
+    volumes:
+      - dnsmasq-tailscale-hosts:/hosts/:ro
+      - ./dnsmasq.conf:/etc/dnsmasq.default:ro
+  hosts:
+    build: .
+    restart: unless-stopped
+    network_mode: "host" # host to get the host's tailscale0 ip
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dnsmasq-tailscale-hosts:/hosts/:rw
+      - ./dnsmasq-generator.sh:/dnsmasq-generator.sh:ro
+
+volumes:
+  dnsmasq-tailscale-hosts:
