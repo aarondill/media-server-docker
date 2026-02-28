@@ -2,21 +2,6 @@ version: 2
 updates:
   - package-ecosystem: "docker-compose"
     directories:
-      - "/arr"
-      - "/beszel"
-      - "/caddy"
-      - "/cups"
       - "/filebrowser"
-      - "/jellyfin"
-      - "/pihole"
-      - "/qbittorrent"
-      - "/seerr"
-      - "/tailscale-dns"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
-    directories:
-      - "/caddy"
-      - "/tailscale-dns"
     schedule:
       interval: "daily"
