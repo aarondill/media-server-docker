@@ -11,14 +11,12 @@ updates:
       - "/pihole"
       - "/qbittorrent"
       - "/seerr"
-      - "/tailscale"
       - "/tailscale-dns"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
     directories:
       - "/caddy"
-      - "/pihole/pihole-dns-shim"
       - "/tailscale-dns"
     schedule:
       interval: "daily"
