@@ -47,7 +47,7 @@ services:
 
   # image used to download stuff; run over gluetun network (vpn killswitch)
   qbittorrent:
-    image: linuxserver/qbittorrent:5.1.4-libtorrentv1
+    image: linuxserver/qbittorrent:5.0.2-libtorrentv1
     container_name: qbittorrent
     depends_on:
       gluetun:
