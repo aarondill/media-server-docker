@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: ./generate-dependabot.sh
+      - run: ./.github/generate-dependabot.sh
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
