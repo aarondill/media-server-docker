@@ -1,6 +1,6 @@
 services:
   tailscale:
-    image: tailscale/tailscale:latest # Image to be used
+    image: tailscale/tailscale:v1.94.2 # Image to be used
     hostname: dns # Name used within your Tailscale environment
     environment:
       TS_ACCEPT_DNS: true
