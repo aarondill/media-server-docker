@@ -12,12 +12,6 @@ if [[ "${#files[@]}" -eq 0 ]]; then
   exit 1
 fi
 
-if command -v realpath &>/dev/null; then
-  dir="$(realpath -- "$(dirname -- "$0")")"
-  # Replace the THIS_DIR line in .env with the absolute path to this directory
-  awk -v dir="$dir" '{ gsub(/^THIS_DIR=.*$/, "THIS_DIR=" dir) }1' -i "$dir/.env"
-fi
-
 # Most services require caddy network, so create it first
 if [ "${cmd[0]}" = up ]; then
   # Check if it exists first
