@@ -11,6 +11,7 @@ updates:
       - "/pihole"
       - "/qbittorrent"
       - "/seerr"
+      - "/speed"
       - "/tailscale-dns"
     schedule:
       interval: "daily"
