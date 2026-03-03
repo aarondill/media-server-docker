@@ -1,0 +1,29 @@
+x-warnings: # A block to avoid repeating the same warnings.
+  - ${DOMAIN_NAME:?DOMAIN_NAME must be set}
+  - ${NIC_ACCESSIBLE:?NIC_ACCESSIBLE must be set}
+x-common-env: &common-env
+  PGID: $GID
+  PUID: $UID
+  TZ: $TZ
+
+services:
+  dockhand:
+    image: fnsys/dockhand:latest
+    container_name: dockhand
+    restart: unless-stopped
+    environment:
+      <<: *common-env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/app/data
+      - ../:/stacks
+    networks:
+      - caddy
+    labels:
+      caddy: docker.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+      pihole.custom-record: '[["docker.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+
+networks:
+  caddy:
+    external: true
