@@ -6,6 +6,7 @@ updates:
       - "/beszel"
       - "/caddy"
       - "/cups"
+      - "/dockhand"
       - "/filebrowser"
       - "/jellyfin"
       - "/pihole"
