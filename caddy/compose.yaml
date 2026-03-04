@@ -37,6 +37,7 @@ services:
       retries: 3
   whoami:
     image: traefik/whoami:latest # don't worry about pinning this
+    restart: unless-stopped
     networks:
       - caddy
     environment:
