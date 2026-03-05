@@ -1,3 +1,5 @@
+from threading import Timer
+import functools
 from urllib.parse import urlsplit
 import docker
 import re
@@ -5,16 +7,12 @@ import os
 import psutil
 import signal
 import sys
-import time
 
 output_file = sys.argv[1] if len(
     sys.argv) > 1 else os.environ.get("HOST_FILE", "")
 if output_file == "":
     print("You must provide an output file or set the HOST_FILE environment variable")
     sys.exit(2)
-
-# TODO: remove polling
-interval = sys.argv[2] if len(sys.argv) > 2 else 30
 
 DOMAIN_LABEL = "caddy"
 INTERFACE = "tailscale0"
@@ -35,8 +33,7 @@ def get_interface_ips(interface: str) -> [str]:
 label_re = re.compile(r"^%s(_\d+)?$" % re.escape(DOMAIN_LABEL))
 
 
-def go():
-    client = docker.from_env()
+def get_contents(client):
     containers = client.containers.list()
     # Note: caddyfiles can contain a protocol and a port, want the hostname
     domains = [
@@ -68,19 +65,40 @@ def signal_handler(signal, frame) -> None:
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
+
+def debounce(timeout: float):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            wrapper.func.cancel()
+            wrapper.func = Timer(timeout, func, args, kwargs)
+            wrapper.func.start()
+
+        wrapper.func = Timer(timeout, lambda: None)
+        return wrapper
+    return decorator
+
+
+@debounce(5)  # wait 5 seconds before updating
+def go():
+    contents = get_contents(client) or ""
+    try:
+        with open(output_file, "r") as f:
+            current = f.read()
+    except FileNotFoundError:
+        current = ""
+    if contents != current:
+        # write all at once to avoid dnsmasq reading partial files
+        with open(output_file, "w") as f:
+            f.write(contents)
+        print("Wrote %s" % output_file, file=sys.stderr)
+
+
 try:
-    while True:
-        contents = go() or ""
-        try:
-            with open(output_file, "r") as f:
-                current = f.read()
-        except FileNotFoundError:
-            current = ""
-        if contents != current:
-            # write all at once to avoid dnsmasq reading partial files
-            with open(output_file, "w") as f:
-                f.write(contents)
-            print("Wrote %s" % output_file, file=sys.stderr)
-        time.sleep(interval)
+    client = docker.from_env()
+    for event in client.events(decode=True, filters={"type": "container"}):
+        if event["status"] not in ["start", "stop", "die"]:
+            continue  # ignore most other events
+        go()
 except InterruptException:
     print("Interrupted, exiting")
