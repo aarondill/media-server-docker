@@ -40,7 +40,8 @@ def go():
     containers = client.containers.list()
     # Note: caddyfiles can contain a protocol and a port, want the hostname
     domains = [
-        urlsplit(v).hostname for c in containers for k, v in c.labels.items() if re.match(label_re, k)
+        urlsplit(v).hostname or urlsplit("//" + v).hostname
+        for c in containers for k, v in c.labels.items() if re.match(label_re, k)
     ]
     # Exclude anything that's not reachable
     domains[:] = [d for d in domains if not is_loopback(d)]
