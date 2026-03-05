@@ -1,9 +1,9 @@
 import docker
-import sys
 import os
-import time
 import psutil
-import socket
+import signal
+import sys
+import time
 
 output_file = sys.argv[1] if len(
     sys.argv) > 1 else os.environ.get("HOST_FILE", "")
@@ -49,17 +49,30 @@ def go():
     return "\n".join(ret)
 
 
-while True:
-    # write even if it returns 1, since this means we don't want any entries
-    contents = go() or ""
-    try:
-        with open(output_file, "r") as f:
-            current = f.read()
-    except FileNotFoundError:
-        current = ""
-    if contents != current:
-        # write all at once to avoid dnsmasq reading partial files
-        with open(output_file, "w") as f:
-            f.write(contents)
-        print("Wrote %s" % output_file, file=sys.stderr)
-    time.sleep(interval)
+class InterruptException(Exception):
+    pass
+
+
+def signal_handler(signal, frame) -> None:
+    raise InterruptException()
+
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+try:
+    while True:
+        contents = go() or ""
+        try:
+            with open(output_file, "r") as f:
+                current = f.read()
+        except FileNotFoundError:
+            current = ""
+        if contents != current:
+            # write all at once to avoid dnsmasq reading partial files
+            with open(output_file, "w") as f:
+                f.write(contents)
+            print("Wrote %s" % output_file, file=sys.stderr)
+        time.sleep(interval)
+except InterruptException:
+    print("Interrupted, exiting")
