@@ -19,6 +19,6 @@ updates:
   - package-ecosystem: "docker"
     directories:
       - "/caddy"
-      - "/tailscale-dns"
+      - "/tailscale-dns/pydns"
     schedule:
       interval: "daily"
