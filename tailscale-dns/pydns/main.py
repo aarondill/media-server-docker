@@ -1,4 +1,6 @@
+from urllib.parse import urlsplit
 import docker
+import re
 import os
 import psutil
 import signal
@@ -18,34 +20,39 @@ DOMAIN_LABEL = "caddy"
 INTERFACE = "tailscale0"
 
 
-def ip_is_loopback(ip: str) -> bool:
-    return ip.startswith("127.") or ip.startswith("0.") or ip == "::1" or ip == "::" or ip.startswith("fe80:")
+def is_loopback(ip: str) -> bool:
+    return ip in ["localhost", "::1", "0.0.0.0", "::"] or ip.startswith("127.") or ip.startswith("fe80:")
 
 
 def get_interface_ips(interface: str) -> [str]:
     s = psutil.net_if_addrs()
     if interface not in s:
         return None
-    return [i.address for i in s[interface] if not ip_is_loopback(i.address)]
+    return [i.address for i in s[interface] if not is_loopback(i.address)]
+
+
+# Find anything that matches `caddy` or `caddy_0`, etc.
+label_re = re.compile(r"^%s(_\d+)?$" % re.escape(DOMAIN_LABEL))
 
 
 def go():
     client = docker.from_env()
-    containers = [c for c in client.containers.list()
-                  if c.labels.get(DOMAIN_LABEL)]
-    if len(containers) == 0:
-        print("No containers found with label %s" %
-              DOMAIN_LABEL, file=sys.stderr)
+    containers = client.containers.list()
+    # Note: caddyfiles can contain a protocol and a port, want the hostname
+    domains = [
+        urlsplit(v).hostname for c in containers for k, v in c.labels.items() if re.match(label_re, k)
+    ]
+    # Exclude anything that's not reachable
+    domains[:] = [d for d in domains if not is_loopback(d)]
+    if len(domains) == 0:
+        print("No domains found in labels", file=sys.stderr)
         return None
+
     ips = get_interface_ips(INTERFACE)
     if len(ips) == 0:
         print("No IPs found for %s" % INTERFACE, file=sys.stderr)
         return None
-    ret = []
-    for c in containers:
-        domain = c.labels[DOMAIN_LABEL]
-        for ip in ips:
-            ret.append("%-26s\t%s" % (ip, domain))
+    ret = ["%-26s\t%s" % (ip, d) for d in domains for ip in ips]
     return "\n".join(ret)
 
 
