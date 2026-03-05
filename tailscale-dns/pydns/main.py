@@ -97,10 +97,7 @@ def go():
 try:
     client = docker.from_env()
     go(client)  # Seed an initial run
-    for event in client.events(decode=True, filters={"type": "container"}):
-        print(event)
-        if event["Action"] not in ["start", "stop", "die"]:
-            continue  # ignore most other events
+    for event in client.events(decode=True, filters={"type": "container", "event": ["start", "stop", "die"]}):
         go()
 except InterruptException:
     print("Interrupted, exiting")
