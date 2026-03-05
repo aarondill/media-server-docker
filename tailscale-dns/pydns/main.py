@@ -80,7 +80,7 @@ def debounce(timeout: float):
 
 
 @debounce(5)  # wait 5 seconds before updating
-def go():
+def go(client):
     contents = get_contents(client) or ""
     try:
         with open(output_file, "r") as f:
@@ -98,6 +98,6 @@ try:
     client = docker.from_env()
     go(client)  # Seed an initial run
     for event in client.events(decode=True, filters={"type": "container", "event": ["start", "stop", "die"]}):
-        go()
+        go(client)
 except InterruptException:
     print("Interrupted, exiting")
