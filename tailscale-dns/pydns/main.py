@@ -97,7 +97,8 @@ def go():
 try:
     client = docker.from_env()
     for event in client.events(decode=True, filters={"type": "container"}):
-        if event["status"] not in ["start", "stop", "die"]:
+        print(event)
+        if event["Action"] not in ["start", "stop", "die"]:
             continue  # ignore most other events
         go()
 except InterruptException:
