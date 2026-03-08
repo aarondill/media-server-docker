@@ -16,12 +16,14 @@ services:
     volumes:
       - ./config/cupsd.conf:/etc/cups/cupsd.conf:ro
       - ./config/printers.conf:/etc/cups/printers.conf:ro
+      - ./config/ppd:/etc/cups/ppd
     networks:
       - caddy
     labels:
       caddy: cups.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 631}}"
       pihole.custom-record: '[["cups.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+
 networks:
   caddy:
     external: true
