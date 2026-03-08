@@ -11,6 +11,7 @@ services:
       PIHOLE_TOKEN: "$PIHOLE_TOKEN"
       PIHOLE_API: "http://pi.hole/api"
       OWNERSHIP_MODE: "DOMAIN"
+      INTERVAL_SECONDS: 30
       REAP_SECONDS: 10
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
