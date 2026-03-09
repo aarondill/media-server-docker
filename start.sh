@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 shopt -s nullglob
+cd "$(dirname -- "$0")"
+
 cmd=(up -d "$@")
 if [[ "$0" == *"stop.sh" ]]; then
   cmd=(down "$@")
@@ -14,6 +16,7 @@ fi
 
 # Most services require caddy network, so create it first
 if [ "${cmd[0]}" = up ]; then
+  ./env.sh # generate .env
   # Check if it exists first
   if ! docker network inspect caddy &>/dev/null; then
     echo "> Creating caddy network"
