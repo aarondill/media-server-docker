@@ -31,6 +31,21 @@ if ! command -v varlock >/dev/null; then
 fi
 
 code=0
+
+if [ "${1:-}" = "all" ]; then
+  echo "# Aggregating all .env files..." >&2
+  file=/tmp/env.all
+  true >"$file"
+  for f in */.env.schema; do
+    d="$(realpath "$(dirname "$f")")"
+    echo "# @import($d/)" >>"$file"
+  done
+  echo "# ------" >>"$file"
+  varlock load -p "$file" -f env || code=$?
+  rm -f "$file"
+  exit "$code"
+fi
+
 for f in */.env.schema; do
   d="$(dirname "$f")"
   echo "Generating $d/.env from $f"
