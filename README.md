@@ -8,8 +8,12 @@ See [rpi-docker](https://github.com/aarondill/rpi-docker) for my Raspberry Pi se
 
 1. Install Docker and Docker Compose
 2. Clone this repo: `git clone --recurse-submodules https://github.com/aarondill/media-server-docker.git`
-3. run `cp .env.example .env` and edit `.env`
-4. Run `./start.sh` to start all the containers
+3. Set environment variables in `.env.local`. See `.env.schema` for a list of variables. You can also run `./env.sh` and it will tell you what is missing.
+   - You can either set each stack's variables in `stack/.env.local` or set them in the root `.env.local`
+   - Stack level variables will override root level variables
+4. Install [`varlock`](https://varlock.dev/getting-started/installation/) (or npm/pnpm) for environment variable management
+5. Run `./env.sh` to set up the environment variables for each stack (re-run this if you change a variable!)
+6. Run `./start.sh` to start all the containers
    - You can also run `docker-compose up` in each directory to start each of the containers
 
 ## Manual Setup
