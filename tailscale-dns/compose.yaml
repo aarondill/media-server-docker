@@ -13,7 +13,7 @@ services:
     cap_add: [net_admin]
     healthcheck: # The built-in healthcheck doesn't seem to respond to internet loss.
       test: tailscale status --peers=false --json | grep -q 'Online.*true'
-      interval: 30s
+      interval: 5m
       start_period: 5s
     restart: unless-stopped
 
