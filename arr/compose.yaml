@@ -10,7 +10,7 @@ x-common-env: &common-env
 services:
   # image used to index torrent links from the internet
   prowlarr:
-    image: linuxserver/prowlarr:2.3.0
+    image: linuxserver/prowlarr:2.3.5
     container_name: prowlarr
     environment:
       <<: *common-env
