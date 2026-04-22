@@ -83,26 +83,6 @@ services:
       caddy.reverse_proxy: "{{upstreams 6767}}"
       pihole.custom-record: '[["bazarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 
-  # image used to scan for music
-  lidarr:
-    image: linuxserver/lidarr:3.1.0
-    container_name: lidarr
-    environment:
-      <<: *common-env
-    volumes:
-      - $MEDIA_ROOT:/data
-      - ./configs/lidarr:/config
-    ports:
-      - 8686:8686/tcp # web ui
-    restart: unless-stopped
-    networks:
-      - caddy
-    labels:
-      caddy: lidarr.$DOMAIN_NAME
-      caddy.reverse_proxy: "{{upstreams 8686}}"
-      pihole.custom-record: '[["lidarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
-
-
   # image used to bypass cloudflare for prowlarr
   byparr:
     image: ghcr.io/thephaseless/byparr:2.1
