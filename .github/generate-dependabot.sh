@@ -6,8 +6,13 @@ tmpfile=$(mktemp)
 trap 'rm -f "$tmpfile"' EXIT
 # File Header
 cat >|"$tmpfile" <<'YAML'
+# This is a generated file. Please do not edit it directly. Edit ./generate-dependabot.sh instead.
 version: 2
 updates:
+  - package-ecosystem: "gitsubmodule"
+    schedule:
+      interval: "daily"
+    directory: "/"
 YAML
 
 # Find and sort all docker-compose.yml directories
@@ -16,17 +21,14 @@ if [ "${#composes[@]}" -gt 0 ]; then
   # Header
   cat <<'YAML'
   - package-ecosystem: "docker-compose"
+    schedule:
+      interval: "daily"
     directories:
 YAML
   for file in "${composes[@]}"; do
     d=$(dirname -- "$file")
     printf '      - "%s"\n' "/${d#"./"}" # remove leading ./; replace with /
   done | sort
-  # Append the schedule block
-  cat <<'YAML'
-    schedule:
-      interval: "daily"
-YAML
 fi >>"$tmpfile"
 
 # Find and sort all Dockerfile directories
@@ -35,17 +37,14 @@ if [ "${#dockerfiles[@]}" -gt 0 ]; then
   # Header
   cat <<'YAML'
   - package-ecosystem: "docker"
+    schedule:
+      interval: "daily"
     directories:
 YAML
   for file in "${dockerfiles[@]}"; do
     d=$(dirname -- "$file")
     printf '      - "%s"\n' "/${d#"./"}" # remove leading ./; replace with /
   done | sort
-  # Append the schedule block
-  cat <<'YAML'
-    schedule:
-      interval: "daily"
-YAML
 fi >>"$tmpfile"
 
 if [ "${#composes[@]}" -eq 0 ] && [ "${#dockerfiles[@]}" -eq 0 ]; then
