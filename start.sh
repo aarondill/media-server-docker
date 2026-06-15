@@ -6,6 +6,8 @@ cd "$(dirname -- "$0")"
 cmd=(up -d "$@")
 if [[ "$0" == *"stop.sh" ]]; then
   cmd=(down "$@")
+elif [[ "$0" == *"pull.sh" ]]; then
+  cmd=(pull "$@")
 fi
 
 files=(./*/compose.yaml)
@@ -15,14 +17,14 @@ if [[ "${#files[@]}" -eq 0 ]]; then
 fi
 
 # Most services require caddy network, so create it first
-if [ "${cmd[0]}" = up ]; then
-  ./env.sh # generate .env
-  # Check if it exists first
+case "${cmd[0]}" in
+  pull) ./env.sh;; # generate .env
+  up) ./env.sh # generate .env
   if ! docker network inspect caddy &>/dev/null; then
     echo "> Creating caddy network"
     docker network create caddy --ipv6
-  fi
-fi
+  fi ;;
+esac
 
 for file in "${files[@]}"; do
   dir="$(dirname -- "$file")"
