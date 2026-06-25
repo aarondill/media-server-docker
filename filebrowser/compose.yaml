@@ -23,6 +23,7 @@ services:
       caddy: files.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8081}}"
       pihole.custom-record: '[["files.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://files.$DOMAIN_NAME
     restart: unless-stopped
 
 networks:

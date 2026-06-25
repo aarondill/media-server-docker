@@ -25,6 +25,7 @@ services:
       caddy: prowlarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 9696}}"
       pihole.custom-record: '[["prowlarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://prowlarr.$DOMAIN_NAME
 
   # image used to scan for tv shows
   sonarr:
@@ -44,6 +45,7 @@ services:
       caddy: sonarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8989}}"
       pihole.custom-record: '[["sonarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://sonarr.$DOMAIN_NAME
 
   # image used to scan for movies
   radarr:
@@ -63,6 +65,7 @@ services:
       caddy: radarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 7878}}"
       pihole.custom-record: '[["radarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://radarr.$DOMAIN_NAME
 
   # image used to manage subtitles
   bazarr:
@@ -82,6 +85,7 @@ services:
       caddy: bazarr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 6767}}"
       pihole.custom-record: '[["bazarr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://bazarr.$DOMAIN_NAME
 
   # image used to bypass cloudflare for prowlarr
   byparr:

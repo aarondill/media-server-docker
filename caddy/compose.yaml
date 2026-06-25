@@ -46,6 +46,7 @@ services:
       caddy: whoami.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 4444}}"
       pihole.custom-record: '[["whoami.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://whoami.$DOMAIN_NAME
 
 networks:
   caddy:

@@ -23,6 +23,7 @@ services:
       caddy: cups.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 631}}"
       pihole.custom-record: '[["cups.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://cups.$DOMAIN_NAME
 
 networks:
   caddy:

@@ -13,6 +13,7 @@ services:
       caddy: speed.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 3000}}"
       pihole.custom-record: '[["speed.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://speed.$DOMAIN_NAME
 
 networks:
   caddy:

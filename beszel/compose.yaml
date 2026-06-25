@@ -26,6 +26,7 @@ services:
       caddy: dash.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8090}}"
       pihole.custom-record: '[["dash.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://dash.$DOMAIN_NAME
 
   beszel-agent:
     image: henrygd/beszel-agent:0.18

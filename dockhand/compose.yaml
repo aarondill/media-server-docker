@@ -23,6 +23,7 @@ services:
       caddy: docker.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 3000}}"
       pihole.custom-record: '[["docker.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://docker.$DOMAIN_NAME
 
 networks:
   caddy:

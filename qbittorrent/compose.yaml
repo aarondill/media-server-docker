@@ -43,6 +43,7 @@ services:
       caddy: qbittorrent.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 8080}}"
       pihole.custom-record: '[["qbittorrent.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://qbittorrent.$DOMAIN_NAME
     restart: unless-stopped
 
   # image used to download stuff; run over gluetun network (vpn killswitch)

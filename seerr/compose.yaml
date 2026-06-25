@@ -28,6 +28,7 @@ services:
       caddy: seerr.$DOMAIN_NAME
       caddy.reverse_proxy: "{{upstreams 5055}}"
       pihole.custom-record: '[["seerr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
+      dockhand.url: https://seerr.$DOMAIN_NAME
 
 networks:
   caddy:
