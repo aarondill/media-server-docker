@@ -25,10 +25,8 @@ services:
     networks:
       - caddy
     labels:
-      caddy_0: jellyseerr.$DOMAIN_NAME
-      caddy_0.redir: "https://seerr.$DOMAIN_NAME{uri}"
-      caddy_1: seerr.$DOMAIN_NAME
-      caddy_1.reverse_proxy: "{{upstreams 5055}}"
+      caddy: seerr.$DOMAIN_NAME
+      caddy.reverse_proxy: "{{upstreams 5055}}"
       pihole.custom-record: '[["seerr.$DOMAIN_NAME", "iface:$NIC_ACCESSIBLE"]]'
 
 networks:
