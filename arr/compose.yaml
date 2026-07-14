@@ -49,7 +49,7 @@ services:
 
   # image used to scan for movies
   radarr:
-    image: linuxserver/radarr:6.2.1
+    image: linuxserver/radarr:6.3.0
     container_name: radarr
     environment:
       <<: *common-env
