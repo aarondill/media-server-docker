@@ -26,6 +26,7 @@ services:
     depends_on:
       tailscale:
         condition: service_healthy
+        restart: true
     environment:
       DNS1: "pihole" # resolved using tailscale magicdns (TS_ACCEPT_DNS=true)
       DNS2: ""
@@ -39,6 +40,7 @@ services:
     depends_on: # Needs tailscale IP
       tailscale:
         condition: service_healthy
+        restart: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dnsmasq-tailscale-hosts:/hosts/:rw
