@@ -5,7 +5,7 @@ x-warnings: # A block to avoid repeating the same warnings.
 
 services:
   beszel:
-    image: henrygd/beszel:0.18
+    image: henrygd/beszel:0.19
     container_name: beszel
     ports:
       - 8090:8090
