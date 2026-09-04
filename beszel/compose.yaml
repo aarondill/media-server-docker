@@ -29,7 +29,7 @@ services:
       dockhand.url: https://dash.$DOMAIN_NAME
 
   beszel-agent:
-    image: henrygd/beszel-agent:0.18
+    image: henrygd/beszel-agent:0.19
     container_name: beszel-agent
     privileged: true # This can be replaced with `devices: ...` to allow smartctl to run
     cap_add:
