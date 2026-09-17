@@ -147,6 +147,11 @@
       <Url>https://repo.jellyfin.org/files/plugin/manifest.json</Url>
       <Enabled>true</Enabled>
     </RepositoryInfo>
+    <RepositoryInfo>
+      <Name>Intro-skipper</Name>
+      <Url>https://intro-skipper.org/manifest.json</Url>
+      <Enabled>true</Enabled>
+    </RepositoryInfo>
   </PluginRepositories>
   <EnableExternalContentInSuggestions>true</EnableExternalContentInSuggestions>
   <ImageExtractionTimeoutMs>0</ImageExtractionTimeoutMs>
@@ -189,5 +194,5 @@
     <JpegQuality>80</JpegQuality>
     <ProcessThreads>1</ProcessThreads>
   </TrickplayOptions>
-  <EnableLegacyAuthorization>true</EnableLegacyAuthorization>
+  <EnableLegacyAuthorization>false</EnableLegacyAuthorization>
 </ServerConfiguration>
