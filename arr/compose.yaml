@@ -89,7 +89,7 @@ services:
 
   # image used to bypass cloudflare for prowlarr
   byparr:
-    image: ghcr.io/thephaseless/byparr:3.0
+    image: ghcr.io/thephaseless/byparr:3.1
     container_name: byparr
     environment:
       <<: *common-env
